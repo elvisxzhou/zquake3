@@ -1,0 +1,15 @@
+Debug
+*.dll
+*.lib
+*.pdb
+*.exe
+*.PK3
+*.log
+*.htm
+.vs
+*.obj
+zig-cache
+*.filters
+*.user
+*.tlog
+.vscode

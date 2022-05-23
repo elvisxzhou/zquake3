@@ -24,6 +24,7 @@ pub fn getLibrary(
 
     const lib_cflags = &[_][]const u8{
         "-DC_ONLY",
+        "-fno-sanitize=undefined,memory,address,safe-stack",
         "-DBOTLIB"
     };
 
