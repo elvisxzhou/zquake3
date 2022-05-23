@@ -106,7 +106,7 @@ void AAS_RoutingInfo(void)
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-__inline int AAS_ClusterAreaNum(int cluster, int areanum)
+static __inline int AAS_ClusterAreaNum(int cluster, int areanum)
 {
 	int side, areacluster;
 

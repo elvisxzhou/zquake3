@@ -135,7 +135,7 @@ struct vm_s {
 
 	// for dynamic linked modules
 	void		*dllHandle;
-	int			(QDECL *entryPoint)( int callNum, ... );
+	int			(QDECL *entryPoint)( intptr_t callNum, ... );
 
 	// for interpreted modules
 	qboolean	currentlyInterpreting;
@@ -168,10 +168,10 @@ extern	vm_t	*currentVM;
 extern	int		vm_debugLevel;
 
 void VM_Compile( vm_t *vm, vmHeader_t *header );
-int	VM_CallCompiled( vm_t *vm, int *args );
+int	VM_CallCompiled( vm_t *vm, intptr_t *args );
 
 void VM_PrepareInterpreter( vm_t *vm, vmHeader_t *header );
-int	VM_CallInterpreted( vm_t *vm, int *args );
+int	VM_CallInterpreted( vm_t *vm, intptr_t *args );
 
 vmSymbol_t *VM_ValueToFunctionSymbol( vm_t *vm, int value );
 int VM_SymbolToValue( vm_t *vm, const char *symbol );

@@ -391,6 +391,7 @@ qboolean EmitMovEBXEDI(vm_t *vm, int andit) {
 	return qfalse;
 }
 
+#ifndef DLL_ONLY
 /*
 =================
 VM_Compile
@@ -1084,6 +1085,7 @@ void VM_Compile( vm_t *vm, vmHeader_t *header ) {
 
 }
 
+#endif
 /*
 ==============
 VM_CallCompiled

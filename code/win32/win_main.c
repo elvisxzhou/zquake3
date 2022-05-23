@@ -290,7 +290,7 @@ char **Sys_ListFiles( const char *directory, const char *extension, char *filter
 	char		**listCopy;
 	char		*list[MAX_FOUND_FILES];
 	struct _finddata_t findinfo;
-	int			findhandle;
+	intptr_t	findhandle;
 	int			flag;
 	int			i;
 
@@ -1088,83 +1088,81 @@ void Sys_Init( void ) {
 		Cvar_Set( "arch", "unknown Windows variant" );
 	}
 
-	// save out a couple things in rom cvars for the renderer to access
-	Cvar_Get( "win_hinstance", va("%i", (int)g_wv.hInstance), CVAR_ROM );
-	Cvar_Get( "win_wndproc", va("%i", (int)MainWndProc), CVAR_ROM );
-
 	//
 	// figure out our CPU
 	//
-	Cvar_Get( "sys_cpustring", "detect", 0 );
-	if ( !Q_stricmp( Cvar_VariableString( "sys_cpustring"), "detect" ) )
-	{
-		Com_Printf( "...detecting CPU, found " );
 
-		cpuid = Sys_GetProcessorId();
+	//TODO detect cpu
+	// Cvar_Get( "sys_cpustring", "detect", 0 );
+	// if ( !Q_stricmp( Cvar_VariableString( "sys_cpustring"), "detect" ) )
+	// {
+	// 	Com_Printf( "...detecting CPU, found " );
 
-		switch ( cpuid )
-		{
-		case CPUID_GENERIC:
-			Cvar_Set( "sys_cpustring", "generic" );
-			break;
-		case CPUID_INTEL_UNSUPPORTED:
-			Cvar_Set( "sys_cpustring", "x86 (pre-Pentium)" );
-			break;
-		case CPUID_INTEL_PENTIUM:
-			Cvar_Set( "sys_cpustring", "x86 (P5/PPro, non-MMX)" );
-			break;
-		case CPUID_INTEL_MMX:
-			Cvar_Set( "sys_cpustring", "x86 (P5/Pentium2, MMX)" );
-			break;
-		case CPUID_INTEL_KATMAI:
-			Cvar_Set( "sys_cpustring", "Intel Pentium III" );
-			break;
-		case CPUID_AMD_3DNOW:
-			Cvar_Set( "sys_cpustring", "AMD w/ 3DNow!" );
-			break;
-		case CPUID_AXP:
-			Cvar_Set( "sys_cpustring", "Alpha AXP" );
-			break;
-		default:
-			Com_Error( ERR_FATAL, "Unknown cpu type %d\n", cpuid );
-			break;
-		}
-	}
-	else
-	{
-		Com_Printf( "...forcing CPU type to " );
-		if ( !Q_stricmp( Cvar_VariableString( "sys_cpustring" ), "generic" ) )
-		{
-			cpuid = CPUID_GENERIC;
-		}
-		else if ( !Q_stricmp( Cvar_VariableString( "sys_cpustring" ), "x87" ) )
-		{
-			cpuid = CPUID_INTEL_PENTIUM;
-		}
-		else if ( !Q_stricmp( Cvar_VariableString( "sys_cpustring" ), "mmx" ) )
-		{
-			cpuid = CPUID_INTEL_MMX;
-		}
-		else if ( !Q_stricmp( Cvar_VariableString( "sys_cpustring" ), "3dnow" ) )
-		{
-			cpuid = CPUID_AMD_3DNOW;
-		}
-		else if ( !Q_stricmp( Cvar_VariableString( "sys_cpustring" ), "PentiumIII" ) )
-		{
-			cpuid = CPUID_INTEL_KATMAI;
-		}
-		else if ( !Q_stricmp( Cvar_VariableString( "sys_cpustring" ), "axp" ) )
-		{
-			cpuid = CPUID_AXP;
-		}
-		else
-		{
-			Com_Printf( "WARNING: unknown sys_cpustring '%s'\n", Cvar_VariableString( "sys_cpustring" ) );
-			cpuid = CPUID_GENERIC;
-		}
-	}
-	Cvar_SetValue( "sys_cpuid", cpuid );
-	Com_Printf( "%s\n", Cvar_VariableString( "sys_cpustring" ) );
+	// 	cpuid = Sys_GetProcessorId();
+
+	// 	switch ( cpuid )
+	// 	{
+	// 	case CPUID_GENERIC:
+	// 		Cvar_Set( "sys_cpustring", "generic" );
+	// 		break;
+	// 	case CPUID_INTEL_UNSUPPORTED:
+	// 		Cvar_Set( "sys_cpustring", "x86 (pre-Pentium)" );
+	// 		break;
+	// 	case CPUID_INTEL_PENTIUM:
+	// 		Cvar_Set( "sys_cpustring", "x86 (P5/PPro, non-MMX)" );
+	// 		break;
+	// 	case CPUID_INTEL_MMX:
+	// 		Cvar_Set( "sys_cpustring", "x86 (P5/Pentium2, MMX)" );
+	// 		break;
+	// 	case CPUID_INTEL_KATMAI:
+	// 		Cvar_Set( "sys_cpustring", "Intel Pentium III" );
+	// 		break;
+	// 	case CPUID_AMD_3DNOW:
+	// 		Cvar_Set( "sys_cpustring", "AMD w/ 3DNow!" );
+	// 		break;
+	// 	case CPUID_AXP:
+	// 		Cvar_Set( "sys_cpustring", "Alpha AXP" );
+	// 		break;
+	// 	default:
+	// 		Com_Error( ERR_FATAL, "Unknown cpu type %d\n", cpuid );
+	// 		break;
+	// 	}
+	// }
+	// else
+	// {
+	// 	Com_Printf( "...forcing CPU type to " );
+	// 	if ( !Q_stricmp( Cvar_VariableString( "sys_cpustring" ), "generic" ) )
+	// 	{
+	// 		cpuid = CPUID_GENERIC;
+	// 	}
+	// 	else if ( !Q_stricmp( Cvar_VariableString( "sys_cpustring" ), "x87" ) )
+	// 	{
+	// 		cpuid = CPUID_INTEL_PENTIUM;
+	// 	}
+	// 	else if ( !Q_stricmp( Cvar_VariableString( "sys_cpustring" ), "mmx" ) )
+	// 	{
+	// 		cpuid = CPUID_INTEL_MMX;
+	// 	}
+	// 	else if ( !Q_stricmp( Cvar_VariableString( "sys_cpustring" ), "3dnow" ) )
+	// 	{
+	// 		cpuid = CPUID_AMD_3DNOW;
+	// 	}
+	// 	else if ( !Q_stricmp( Cvar_VariableString( "sys_cpustring" ), "PentiumIII" ) )
+	// 	{
+	// 		cpuid = CPUID_INTEL_KATMAI;
+	// 	}
+	// 	else if ( !Q_stricmp( Cvar_VariableString( "sys_cpustring" ), "axp" ) )
+	// 	{
+	// 		cpuid = CPUID_AXP;
+	// 	}
+	// 	else
+	// 	{
+	// 		Com_Printf( "WARNING: unknown sys_cpustring '%s'\n", Cvar_VariableString( "sys_cpustring" ) );
+	// 		cpuid = CPUID_GENERIC;
+	// 	}
+	// }
+	// Cvar_SetValue( "sys_cpuid", cpuid );
+	// Com_Printf( "%s\n", Cvar_VariableString( "sys_cpustring" ) );
 
 	Cvar_Set( "username", Sys_GetCurrentUser() );
 
@@ -1192,6 +1190,8 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	}
 
 	g_wv.hInstance = hInstance;
+	g_wv.mainWndProc = MainWndProc;
+
 	Q_strncpyz( sys_cmdline, lpCmdLine, sizeof( sys_cmdline ) );
 
 	// done before Com/Sys_Init since we need this for error output

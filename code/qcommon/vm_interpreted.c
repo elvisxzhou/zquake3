@@ -146,7 +146,7 @@ void VM_StackTrace( vm_t *vm, int programCounter, int programStack ) {
 
 }
 
-
+#ifndef DLL_ONLY
 /*
 ====================
 VM_PrepareInterpreter
@@ -281,6 +281,7 @@ void VM_PrepareInterpreter( vm_t *vm, vmHeader_t *header ) {
 	}
 }
 
+#endif
 /*
 ==============
 VM_Call
@@ -310,6 +311,7 @@ locals from sp
 
 #define	DEBUGSTR va("%s%i", VM_Indent(vm), opStack-stack )
 
+#ifndef DLL_ONLY
 int	VM_CallInterpreted( vm_t *vm, int *args ) {
 	int		stack[MAX_STACK];
 	int		*opStack;
@@ -887,3 +889,4 @@ done:
 	// return the result
 	return *opStack;
 }
+#endif

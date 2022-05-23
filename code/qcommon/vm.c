@@ -324,10 +324,10 @@ Dlls will call this directly
  
 ============
 */
-int QDECL VM_DllSyscall( int arg, ... ) {
-#if ((defined __linux__) && (defined __powerpc__))
+int QDECL VM_DllSyscall( intptr_t arg, ... ) {
+#if 1//((defined __linux__) && (defined __powerpc__))
   // rcg010206 - see commentary above
-  int args[16];
+  intptr_t args[16];
   int i;
   va_list ap;
   
@@ -335,9 +335,9 @@ int QDECL VM_DllSyscall( int arg, ... ) {
   
   va_start(ap, arg);
   for (i = 1; i < sizeof (args) / sizeof (args[i]); i++)
-    args[i] = va_arg(ap, int);
+    args[i] = va_arg(ap, intptr_t);
   va_end(ap);
-  
+
   return currentVM->systemCall( args );
 #else // original id code
 	return currentVM->systemCall( &arg );
@@ -432,7 +432,7 @@ it will attempt to load as a system dll
 
 #define	STACK_SIZE	0x20000
 
-vm_t *VM_Create( const char *module, int (*systemCalls)(int *), 
+vm_t *VM_Create( const char *module, int (*systemCalls)(intptr_t *), 
 				vmInterpret_t interpret ) {
 	vm_t		*vm;
 	vmHeader_t	*header;
@@ -604,7 +604,7 @@ void VM_Clear(void) {
 	lastVM = NULL;
 }
 
-void *VM_ArgPtr( int intValue ) {
+void *VM_ArgPtr( intptr_t intValue ) {
 	if ( !intValue ) {
 		return NULL;
 	}
@@ -620,7 +620,7 @@ void *VM_ArgPtr( int intValue ) {
 	}
 }
 
-void *VM_ExplicitArgPtr( vm_t *vm, int intValue ) {
+void *VM_ExplicitArgPtr( vm_t *vm, intptr_t intValue ) {
 	if ( !intValue ) {
 		return NULL;
 	}
@@ -665,11 +665,11 @@ locals from sp
 #define	MAX_STACK	256
 #define	STACK_MASK	(MAX_STACK-1)
 
-int	QDECL VM_Call( vm_t *vm, int callnum, ... ) {
+int	QDECL VM_Call( vm_t *vm, intptr_t callnum, ... ) {
 	vm_t	*oldVM;
 	int		r;
 	int i;
-	int args[16];
+	intptr_t args[16];
 	va_list ap;
 
 
@@ -827,9 +827,12 @@ void VM_LogSyscalls( int *args ) {
 
 
 #ifdef DLL_ONLY // bk010215 - for DLL_ONLY dedicated servers/builds w/o VM
-int	VM_CallCompiled( vm_t *vm, int *args ) {
+int	VM_CallCompiled( vm_t *vm, intptr_t *args ) {
   return(0); 
 }
-
-//void VM_Compile( vm_t *vm, vmHeader_t *header ) {}
+int	VM_CallInterpreted( vm_t *vm, intptr_t *args ) {
+	return 0;
+}
+void VM_PrepareInterpreter( vm_t *vm, vmHeader_t *header ) {}
+void VM_Compile( vm_t *vm, vmHeader_t *header ) {}
 #endif // DLL_ONLY
